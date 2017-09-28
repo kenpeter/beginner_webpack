@@ -1,3 +1,4 @@
+// Array of obj
 const people = [{
   manager: 'Jen',
   name: 'Bob'
@@ -12,4 +13,5 @@ const people = [{
   name: 'Terrence'
 }];
 
+// Export
 export default people;

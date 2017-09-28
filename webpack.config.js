@@ -5,8 +5,7 @@ const path = require('path');
 
 // config obj
 const config = {
-	// ./src/app.js
-	// context is like full path
+  // Context is like the path in output
   context: path.resolve(__dirname, 'src'),
   // entry, relatived path
 	entry: './app.js',
@@ -36,7 +35,26 @@ const config = {
           ]
         }
       }]
-    }]
+    },
+
+		{
+			test: /\.scss$/,
+			use: [
+				'style-loader',
+				'css-loader',
+				'sass-loader'
+			]
+		},
+
+		{
+			test: /\.(png|jpg)$/,
+			use: [{
+				loader: 'url-loader',
+				options: { limit: 10000 }
+			}]
+		}
+
+		]
   }
 }
 
