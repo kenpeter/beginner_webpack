@@ -1,30 +1,34 @@
-// import img file path
-import codeURL from './code.png'
+if (module.hot) {
+  module.hot.accept();
+}
 
-
-import {groupBy} from 'lodash/collection';
-import people from './people';
 import './style.scss';
+import {groupBy} from 'lodash/collection';
+// array of obj
+import people from './people';
 
-
-// Action group by manager
+// obj
 const managerGroups = groupBy(people, 'manager');
 
-// get root, like jquery
+// get root
 const root = document.querySelector('#root');
-// insert data with json stringify
-// print var
-root.innerHTML = `<pre>${JSON.stringify(managerGroups, null, 2)}</pre>`
 
-// Create img element
-const img = document.createElement('img');
-// img url
-img.src = codeURL;
-// color
-img.style.backgroundColor = "#2B3A42";
-// padding
-img.style.padding = "20px";
-// width 
-img.width = 32;
-// put the image into body
-document.body.appendChild(img);
+// inject the obj into root html
+root.innerHTML = `<pre>${JSON.stringify(managerGroups, null, 2)}</pre>`;
+
+// routes.dashboard
+const routes = {
+	// key, value (func)
+  dashboard: () => {
+		// dynamically load
+		// .then promise
+    System.import('./dashboard').then((dashboard) => {
+      dashboard.draw()
+    }).catch((err) => {
+      console.log("Chunk loading failed")
+    })
+  }
+};
+
+// demo async loading with a timeout
+setTimeout(routes.dashboard, 1000);

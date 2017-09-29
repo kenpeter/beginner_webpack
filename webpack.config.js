@@ -1,19 +1,29 @@
-// webpack install locally
 const webpack = require('webpack');
-// physical path
 const path = require('path');
 
-// config obj
+// common files
+const extractCommons = new webpack.optimize.CommonsChunkPlugin({
+  // ?	
+	name: 'commons',
+	// actual file
+  filename: 'commons.js'
+});
+
+// require extract text
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// we name the after exact css file 
+const extractCSS = new ExtractTextPlugin('[name].bundle.css');
+
 const config = {
-  // Context is like the path in output
   context: path.resolve(__dirname, 'src'),
-  // entry, relatived path
-	entry: './app.js',
-	// input, output
+	entry: {
+		app: './app.js',
+		admin: './admin.js'
+	},
   output: {
-		// ./dist/bundle.js
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+		publicPath: '/dist/',
+    filename: '[name].bundle.js'
   },
 
 	// module means loader
@@ -39,11 +49,7 @@ const config = {
 
 		{
 			test: /\.scss$/,
-			use: [
-				'style-loader',
-				'css-loader',
-				'sass-loader'
-			]
+			loader: extractCSS.extract(['stsyle-loader', 'css-loader', 'sass-loader'])
 		},
 
 		{
@@ -55,7 +61,13 @@ const config = {
 		}
 
 		]
-  }
+  },
+
+	plugins: [
+		extractCommons,
+		extractCSS,
+		new webpack.NamedModulesPlugin()
+	]
 }
 
 // es5 syntax export constant
